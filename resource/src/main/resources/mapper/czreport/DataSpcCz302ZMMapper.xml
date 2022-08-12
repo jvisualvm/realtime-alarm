@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risen.realtime.resource.report.analysis.mapper.DataSpcCz302ZMMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.risen.realtime.resource.report.analysis.entity.DataSpcCz302ZMEntity">
+        <id column="data_time" property="dataTime"/>
+        <id column="shift" property="shift"/>
+        <result column="data_key" property="dataKey"/>
+        <result column="team" property="team"/>
+        <result column="tester" property="tester"/>
+        <result column="line" property="line"/>
+        <result column="iot_id" property="iotId"/>
+        <result column="test_location" property="testLocation"/>
+        <result column="film_thickness" property="filmThickness"/>
+        <result column="refractivity" property="refractivity"/>
+        <result column="film_retest" property="filmRetest"/>
+        <result column="refractive_retest" property="refractiveRetest"/>
+        <result column="mh_dy_cn" property="mhDyCn"/>
+        <result column="mh_dy_a" property="mhDyA"/>
+        <result column="mh_dy_b" property="mhDyB"/>
+        <result column="mh_dy_c" property="mhDyC"/>
+        <result column="mh_dy_d" property="mhDyD"/>
+        <result column="zs_dy_cn" property="zsDyCn"/>
+        <result column="zs_dy_a" property="zsDyA"/>
+        <result column="zs_dy_b" property="zsDyB"/>
+        <result column="zs_dy_c" property="zsDyC"/>
+        <result column="zs_dy_d" property="zsDyD"/>
+        <result column="mh_yh_cn" property="mhYhCn"/>
+        <result column="mh_yh_a" property="mhYhA"/>
+        <result column="mh_yh_b" property="mhYhB"/>
+        <result column="mh_yh_c" property="mhYhC"/>
+        <result column="mh_yh_d" property="mhYhD"/>
+        <result column="zs_yh_cn" property="zsYhCn"/>
+        <result column="zs_yh_a" property="zsYhA"/>
+        <result column="zs_yh_b" property="zsYhB"/>
+        <result column="zs_yh_c" property="zsYhC"/>
+        <result column="zs_yh_d" property="zsYhD"/>
+        <result column="create_time" property="createTime"/>
+        <result column="report_data" property="reportData"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 as data_key ,
+        data_time, shift, team, tester, line, iot_id, test_location, film_thickness, refractivity, film_retest, refractive_retest, mh_dy_cn, mh_dy_a, mh_dy_b, mh_dy_c, mh_dy_d, zs_dy_cn, zs_dy_a, zs_dy_b, zs_dy_c, zs_dy_d, mh_yh_cn, mh_yh_a, mh_yh_b, mh_yh_c, mh_yh_d, zs_yh_cn, zs_yh_a, zs_yh_b, zs_yh_c, zs_yh_d, create_time, report_data
+    </sql>
+
+
+    <sql id="Base_Column_List_Avg">
+        extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 as data_key ,data_time
+        ,shift,line,iot_id,film_thickness,refractivity
+    </sql>
+
+
+    <select id="queryOneByCondition" resultType="com.risen.realtime.resource.report.analysis.entity.DataSpcCz302ZMEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from data_spc_cz302_10_01 limit 1
+    </select>
+
+
+    <select id="queryMaxKey" resultType="java.lang.Long">
+        select COALESCE(max(extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000), 0)
+        from data_spc_cz302_10_01_avg
+    </select>
+
+
+    <select id="queryListByCondition" resultType="com.risen.realtime.resource.report.analysis.entity.DataSpcCz302ZMEntity">
+        select
+        <include refid="Base_Column_List_Avg"/>
+        from data_spc_cz302_10_01_avg where extract(epoch from (to_timestamp(data_time,'yyyy-MM-dd hh24:mi:ss'))) * 1000 > #{dataKey}
+        order by data_time asc
+        limit #{limitCount}
+    </select>
+
+
+</mapper>

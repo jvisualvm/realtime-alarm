@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risen.realtime.resource.report.zeus.mapper.DataSpcCz302BMMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.risen.realtime.resource.report.zeus.entity.DataSpcCz302BMEntity">
+        <id column="itemid" property="itemid"/>
+        <result column="data_key" property="dataKey"/>
+        <result column="ri_qi" property="riQi"/>
+        <result column="ban_ci" property="banCi"/>
+        <result column="ban_zu" property="banZu"/>
+        <result column="tester" property="tester"/>
+        <result column="xian_bie" property="xianBie"/>
+        <result column="lu_guan" property="luGuan"/>
+        <result column="film_thickness" property="filmThickness"/>
+        <result column="refractive_index" property="refractiveIndex"/>
+        <result column="average" property="average"/>
+        <result column="uniformity" property="uniformity"/>
+        <result column="standard_deviation" property="standardDeviation"/>
+        <result column="cp" property="cp"/>
+        <result column="ca" property="ca"/>
+        <result column="cpk" property="cpk"/>
+        <result column="control_upper_limit" property="controlUpperLimit"/>
+        <result column="control_lower_limit" property="controlLowerLimit"/>
+        <result column="spec_upper_limit" property="specUpperLimit"/>
+        <result column="spec_lower_limit" property="specLowerLimit"/>
+        <result column="center_value" property="centerValue"/>
+        <result column="data_time" property="dataTime"/>
+        <result column="ipaddress" property="ipaddress"/>
+        <result column="device_code" property="deviceCode"/>
+        <result column="host" property="host"/>
+        <result column="position" property="position"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        extract(epoch from (to_timestamp(file_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 as data_key  ,  itemid
+        , ri_qi, ban_ci, ban_zu, tester, xian_bie, lu_guan, film_thickness, refractive_index, average, uniformity, standard_deviation, cp, ca, cpk, control_upper_limit, control_lower_limit, spec_upper_limit, spec_lower_limit, center_value, file_time as data_time, ipaddress, device_code, host, position
+    </sql>
+
+
+    <select id="queryMaxKey" resultType="java.lang.Long">
+        select COALESCE(max(extract(epoch from (to_timestamp(file_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000), 0)
+        from spc_notacoria
+    </select>
+
+
+    <select id="queryListByCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from spc_notacoria where extract(epoch from (to_timestamp(file_time,'yyyy-MM-dd hh24:mi:ss'))) * 1000 > #{dataKey}
+        order by file_time asc
+        limit #{limitCount}
+    </select>
+
+
+</mapper>

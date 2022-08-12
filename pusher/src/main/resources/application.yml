@@ -1,0 +1,24 @@
+server:
+  port: 9986
+  servlet:
+    context-path: /realtime
+  application:
+    name: realtime-Pusher
+
+
+spring:
+  profiles:
+    active: '@profile@'
+
+
+
+logging:
+  level:
+    root: info
+
+
+
+
+helper:
+  websocket:
+    switch: true

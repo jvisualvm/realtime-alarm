@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risen.realtime.resource.report.analysis.mapper.DataSpcCz302DPMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.risen.realtime.resource.report.analysis.entity.DataSpcCz302DPEntity">
+        <id column="process_line" property="processLine"/>
+        <id column="data_time" property="dataTime"/>
+        <result column="data_key" property="dataKey"/>
+        <result column="class_order" property="classOrder"/>
+        <result column="tank_number" property="tankNumber"/>
+        <result column="liquid_life" property="liquidLife"/>
+        <result column="weight_type" property="weightType"/>
+        <result column="weight_throw_before1" property="weightThrowBefore1"/>
+        <result column="weight_throw_before2" property="weightThrowBefore2"/>
+        <result column="weight_throw_after1" property="weightThrowAfter1"/>
+        <result column="weight_throw_after2" property="weightThrowAfter2"/>
+        <result column="machine_test" property="machineTest"/>
+        <result column="avg1" property="avg1"/>
+        <result column="avg2" property="avg2"/>
+        <result column="middle_reduce_weight" property="middleReduceWeight"/>
+        <result column="control_down_weight" property="controlDownWeight"/>
+        <result column="control_up_weight" property="controlUpWeight"/>
+        <result column="standards_down_weight" property="standardsDownWeight"/>
+        <result column="standards_up_weight" property="standardsUpWeight"/>
+        <result column="middle_reflex_rate" property="middleReflexRate"/>
+        <result column="contrl_down_reflex_rate" property="contrlDownReflexRate"/>
+        <result column="contrl_up_reflex_rate" property="contrlUpReflexRate"/>
+        <result column="standards_down_reflex_rate" property="standardsDownReflexRate"/>
+        <result column="standards_up_reflex_rate" property="standardsUpReflexRate"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 as data_key
+        , process_line, data_time, class_order, tank_number, liquid_life, weight_type, weight_throw_before1, weight_throw_before2, weight_throw_after1, weight_throw_after2, machine_test, avg1, avg2, middle_reduce_weight, control_down_weight, control_up_weight, standards_down_weight, standards_up_weight, middle_reflex_rate, contrl_down_reflex_rate, contrl_up_reflex_rate, standards_down_reflex_rate, standards_up_reflex_rate
+    </sql>
+
+
+    <select id="queryMaxKey" resultType="java.lang.Long">
+        select COALESCE(max(extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000), 0)
+        from data_spc_cz302_07
+    </select>
+
+
+    <select id="queryListByCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from data_spc_cz302_07 where extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 > #{dataKey}
+        order by data_time asc
+        limit #{limitCount}
+    </select>
+</mapper>

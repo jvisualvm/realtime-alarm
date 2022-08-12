@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risen.realtime.resource.report.analysis.mapper.DataSpcCz302SWMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.risen.realtime.resource.report.analysis.entity.DataSpcCz302SWEntity">
+        <id column="data_time" property="dataTime" />
+        <id column="line" property="line" />
+        <id column="ban" property="ban" />
+        <result column="data_key" property="dataKey" />
+        <result column="dao" property="dao" />
+        <result column="time9" property="time9" />
+        <result column="time11" property="time11" />
+        <result column="time1" property="time1" />
+        <result column="time3" property="time3" />
+        <result column="time5" property="time5" />
+        <result column="avg" property="avg" />
+        <result column="target" property="target" />
+        <result column="con_up" property="conUp" />
+        <result column="con_low" property="conLow" />
+        <result column="spc_up" property="spcUp" />
+        <result column="spc_low" property="spcLow" />
+        <result column="create_time" property="createTime" />
+        <result column="weight_type" property="weightType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 as data_key
+,    data_time, line, ban, dao, time9, time11, time1, time3, time5, avg, target, con_up, con_low, spc_up, spc_low, create_time, weight_type
+    </sql>
+
+
+
+
+
+    <select id="queryMaxKey" resultType="java.lang.Long">
+        select COALESCE(max(extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000), 0)
+        from data_spc_cz302_12_03
+    </select>
+
+
+    <select id="queryListByCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from data_spc_cz302_12_03 where extract(epoch from (to_timestamp(data_time, 'yyyy-MM-dd hh24:mi:ss'))) * 1000 > #{dataKey}
+        order by data_time asc
+        limit #{limitCount}
+    </select>
+
+</mapper>

@@ -1,0 +1,139 @@
+spring:
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      #initialize-schema: always,embedded,never
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: false
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 2000
+      validationQuery: select 1
+      testOnBorrow: false
+      testOnReturn: false
+      testWhileIdle: true
+      # stat,wall,slf4j 去掉wall（SQL注入）是为了执行日期转成毫秒
+      filters: stat,slf4j
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: admin
+        login-password: 123456
+        allow:
+      remove-abandoned: true
+      remove-abandoned-timeout: 180
+      log-abandoned: true
+    master:
+      url: jdbc:mysql://127.0.0.1:3306/push?characterEncoding=utf-8&serverTimezone=GMT%2B8
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+    quartz:
+      url: jdbc:mysql://127.0.0.1:3306/quartz?characterEncoding=utf-8&serverTimezone=GMT%2B8
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+    czreport:
+      #杭州数据分析结果库
+      url: jdbc:postgresql://127.0.0.1:5432/d2
+      username:
+      password:
+      driver-class-name: org.postgresql.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+    zeus:
+      #matrixDB毛数据库
+      url: jdbc:postgresql://127.0.0.1:5432/d1
+      username:
+      password:
+      driver-class-name: org.postgresql.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+  redis:
+    #数据库索引
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    #password: risenAx&ss9
+    jedis:
+      pool:
+        #最大连接数
+        max-active: 8
+        #最大阻塞等待时间(负数表示没限制)
+        max-wait: -1
+        #最大空闲
+        max-idle: 8
+        #最小空闲
+        min-idle: 0
+        #连接超时时间
+    timeout: 10000
+
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+#是否需要使用helper jar包中的某些功能 默认false 使用此包的用户自行开启
+helper:
+  log:
+    switch: false
+  file:
+    switch: false
+  flyway:
+    switch: false
+  translate:
+    switch: false
+  websocket:
+    switch: true
+  flink:
+    switch: true
+
+
+
+flink:
+  config:
+    ui-port: 9091
+
+
+device:
+  cz302:
+    ks:
+      app:
+      form:
+      token:
+      remote: 
+
+
+
+thread:
+  pool:
+    corePoolSize: 64
+    maximumPoolSize: 64
